@@ -1,10 +1,9 @@
-package com.example.demo.api
+package com.example.demo.network.api
 
 import com.example.demo.models.Post
 import com.example.demo.models.PostComment
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PostsAPI {

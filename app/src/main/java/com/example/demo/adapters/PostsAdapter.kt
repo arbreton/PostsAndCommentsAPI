@@ -12,8 +12,10 @@ import android.R.id
 import androidx.constraintlayout.widget.ConstraintLayout
 
 
-class PostsAdapter(var postList: List<Post> = listOf(), val listener: PostActionInterface): RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
+class PostsAdapter(val listener: PostActionInterface): RecyclerView.Adapter<PostsAdapter.PostViewHolder>() {
 
+
+    private var postList: List<Post> = listOf()
 
     inner class PostViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView), PostViewHolderInterface {
         val title = rootView.findViewById<TextView>(R.id.titleValue)
@@ -55,6 +57,11 @@ class PostsAdapter(var postList: List<Post> = listOf(), val listener: PostAction
         }
     }
 
+
+    fun setPostList(posts: List<Post>) {
+        postList = posts
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_element, parent, false)

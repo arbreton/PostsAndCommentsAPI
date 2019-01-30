@@ -10,8 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.demo.models.PostComment
 
 
-class PostCommentsAdapter(var postCommentList: List<PostComment> = listOf()): RecyclerView.Adapter<PostCommentsAdapter.PostViewHolder>() {
+class PostCommentsAdapter: RecyclerView.Adapter<PostCommentsAdapter.PostViewHolder>() {
 
+
+    private var postCommentList: List<PostComment> = listOf()
 
     inner class PostViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView), PostCommentViewHolderInterface {
         val name = rootView.findViewById<TextView>(R.id.nameValue)
@@ -36,6 +38,11 @@ class PostCommentsAdapter(var postCommentList: List<PostComment> = listOf()): Re
         }
     }
 
+
+    fun setPostComments(postComments: List<PostComment>) {
+        postCommentList = postComments
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_comment_element, parent, false)

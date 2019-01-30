@@ -1,8 +1,17 @@
 package com.example.demo.viewmodels
 
+import android.app.Activity
+import android.content.Context
+import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.demo.api.PostsAPI
+import androidx.lifecycle.Observer
+import com.example.demo.activities.MainActivity
+import com.example.demo.activities.PostComments
+import com.example.demo.adapters.PostCommentsAdapter
+import com.example.demo.adapters.PostsAdapter
+import com.example.demo.network.api.PostsAPI
 import com.example.demo.extensions.ifError
 import com.example.demo.extensions.ifSucceeded
 import com.example.demo.models.Post
@@ -13,36 +22,41 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
 
 
-class PostsViewModel: ViewModel(), CoroutineScope {
+class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Default
-
-    val BASE_URL = "https://jsonplaceholder.typicode.com/"
-
-    private var gson: Gson = GsonBuilder()
-        .setLenient()
-        .create()
-    private var retrofit: Retrofit
-    private var postsApi: PostsAPI
+        get() = job + Dispatchers.Main
+    
 
     val error = MutableLiveData<String>()
     val posts = MutableLiveData<List<Post>>()
     val postComments = MutableLiveData<List<PostComment>>()
 
-    init {
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-        postsApi = retrofit.create(PostsAPI::class.java)
+
+    fun observePosts(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostsAdapter) {
+        error.observe(lifecycleOwner, Observer {
+            Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+        })
+        posts.observe(lifecycleOwner, Observer {
+            adapter.setPostList(it)
+            (activity as MainActivity).setupRecyclerView()
+        })
+    }
+
+    fun observePostComments(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostCommentsAdapter) {
+        error.observe(lifecycleOwner, Observer {
+            Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+        })
+        postComments.observe(lifecycleOwner, Observer {
+            adapter.setPostComments(it)
+            (activity as PostComments).setupRecyclerView()
+        })
     }
 
     fun getPosts() {

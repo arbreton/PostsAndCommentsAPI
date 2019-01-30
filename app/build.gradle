@@ -16,8 +16,16 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //API
+            buildConfigField 'String', 'API_BASE_URL', '"https://jsonplaceholder.typicode.com/"'
+        }
+        debug {
+            //API
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'API_BASE_URL', '"https://jsonplaceholder.typicode.com/"'
         }
     }
 }
@@ -38,6 +46,13 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
     implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:1.0.0'
+    //Koin
+    implementation "org.koin:koin-core:1.0.1"
+    implementation "org.koin:koin-android:1.0.1"
+    implementation "org.koin:koin-core-ext:1.0.1"
+    implementation "org.koin:koin-androidx-scope:1.0.1"
+    implementation "org.koin:koin-androidx-viewmodel:1.0.1"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'

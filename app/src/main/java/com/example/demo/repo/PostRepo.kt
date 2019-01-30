@@ -1,6 +1,6 @@
 package com.example.demo.repo
 
-import com.example.demo.api.PostsAPI
+import com.example.demo.network.api.PostsAPI
 import com.example.demo.models.Post
 import com.example.demo.models.PostComment
 import ru.gildor.coroutines.retrofit.Result
