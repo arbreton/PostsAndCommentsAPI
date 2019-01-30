@@ -28,6 +28,7 @@ class PostComments : AppCompatActivity() {
         postsViewModel.getPostComments(postObject.id.toString())
     }
 
+
     private fun setupUI(postObject: Post) {
         titleContainer.visibility = View.GONE
         postContainer.visibility = View.VISIBLE

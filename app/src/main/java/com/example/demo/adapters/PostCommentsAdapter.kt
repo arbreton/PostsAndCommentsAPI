@@ -12,7 +12,6 @@ import com.example.demo.models.PostComment
 
 class PostCommentsAdapter: RecyclerView.Adapter<PostCommentsAdapter.PostViewHolder>() {
 
-
     private var postCommentList: List<PostComment> = listOf()
 
     inner class PostViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView), PostCommentViewHolderInterface {

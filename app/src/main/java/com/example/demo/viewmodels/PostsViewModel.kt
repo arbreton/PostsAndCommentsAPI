@@ -17,6 +17,7 @@ import com.example.demo.extensions.ifSucceeded
 import com.example.demo.models.Post
 import com.example.demo.models.PostComment
 import com.example.demo.repo.PostRepo
+import com.example.demo.viewmodels.interfaces.PostsVmInterface
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,19 +28,19 @@ import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
 
 
-class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
+class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope, PostsVmInterface {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
-    
+
 
     val error = MutableLiveData<String>()
     val posts = MutableLiveData<List<Post>>()
     val postComments = MutableLiveData<List<PostComment>>()
 
 
-    fun observePosts(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostsAdapter) {
+    override fun observePosts(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostsAdapter) {
         error.observe(lifecycleOwner, Observer {
             Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
         })
@@ -49,7 +50,7 @@ class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
         })
     }
 
-    fun observePostComments(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostCommentsAdapter) {
+    override fun observePostComments(lifecycleOwner: LifecycleOwner, activity: Activity, adapter: PostCommentsAdapter) {
         error.observe(lifecycleOwner, Observer {
             Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
         })
@@ -59,7 +60,7 @@ class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
         })
     }
 
-    fun getPosts() {
+    override fun getPosts() {
         launch {
             val result = PostRepo(postsApi).getPosts()
             result.ifSucceeded { data, response ->
@@ -79,7 +80,7 @@ class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
         }
     }
 
-    fun getPostComments(id: String) {
+    override fun getPostComments(id: String) {
         launch {
             val result = PostRepo(postsApi).getPostComments(id)
             result.ifSucceeded { data, response ->
@@ -100,7 +101,7 @@ class PostsViewModel(val postsApi: PostsAPI): ViewModel(), CoroutineScope {
     }
 
 
-    fun getTitle(postObject: Post): String {
+    override fun getTitle(postObject: Post): String {
         var name = ""
         when (postObject.userId) {
             1 -> name = "Brian (01)"
